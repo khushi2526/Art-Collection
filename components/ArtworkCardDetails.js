@@ -3,6 +3,7 @@ import useSWR from "swr";
 import { useState } from "react";
 import { useAtom } from 'jotai';
 import { favouritesAtom } from '@/store'; // Importing favouritesAtom from store
+import Error from 'next/error'; 
 
 const ArtworkCardDetail = ({ objectID }) => {
   const { data, error } = useSWR(

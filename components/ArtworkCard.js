@@ -1,6 +1,7 @@
 import { Card, Button } from "react-bootstrap";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import Error from 'next/error'; 
 
 const ArtworkCard = ({ objectID }) => {
   const router = useRouter();
