@@ -1,3 +1,19 @@
+/********************************************************************************
+*  WEB422 – Assignment 5
+* 
+*  I declare that this assignment is my own work in accordance with Seneca's
+*  Academic Integrity Policy:
+* 
+*  https://www.senecapolytechnic.ca/about/policies/academic-integrity-policy.html
+* 
+*  Name: Khushi Shaileshkumar Kotadia Student ID: 167632215 Date: 08-03-2024
+* 
+*  GitHub URL: https://github.com/khushi2526/WEB422_Assignment-5.git
+*  Website Link: https://web-422-assignment-4-9d53.vercel.app
+*
+********************************************************************************/
+
+/* eslint-disable react/no-unescaped-entities */
 import { Row, Col, Image } from 'react-bootstrap';
 
 const Home = () => {
@@ -5,7 +21,7 @@ const Home = () => {
     <div>
       <Row>
         <Col>
-          <Image src="https://upload.wikimedia.org/wikipedia/commons/3/30/Metropolitan_Museum_of_Art_%28The_Met%29_-_Central_Park%2C_NYC.jpg" fluid rounded />
+          <Image src="https://upload.wikimedia.org/wikipedia/commons/3/30/Metropolitan_Museum_of_Art_%28The_Met%29_-_Central_Park%2C_NYC.jpg" fluid rounded alt="" />
         </Col>
       </Row>
       <Row>
