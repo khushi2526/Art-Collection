@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useRouter } from 'next/router';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
