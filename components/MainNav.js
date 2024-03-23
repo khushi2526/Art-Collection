@@ -2,25 +2,21 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Container, Nav, Navbar, Form, Button, NavDropdown } from 'react-bootstrap';
 import { useAtom } from 'jotai';
-import { addToSearchHistory } from '../store';
+import { searchHistoryAtom } from '../store';
 
 const MainNav = () => {
     const router = useRouter();
-    const [searchField, setSearchField] = useState('');
+    const [searchHistory, setSearchHistory] = useAtom(searchHistoryAtom);
     const [isExpanded, setIsExpanded] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsExpanded(false); // Close navbar when form is submitted
         
-        const queryString = `title=true&q=${searchField}`;
-        addToSearchHistory(queryString);
+        const searchField = e.target.elements.searchField.value;
+        router.push(`/artwork?title=true&q=${searchField}`);
 
-        router.push(`/artwork?${queryString}`);
-    };
-
-    const handleChange = (e) => {
-        setSearchField(e.target.value);
+        setSearchHistory(current => [...current, `title=true&q=${searchField}`]);
     };
 
     const toggleNavbar = () => {
@@ -29,11 +25,6 @@ const MainNav = () => {
 
     const closeNavbar = () => {
         setIsExpanded(false); // Close navbar when any Nav.Link is clicked
-    };
-
-    const handleSearchHistoryClick = (query) => {
-        setSearchField(query);
-        handleSubmit({ preventDefault: () => {} });
     };
 
     return (
@@ -49,19 +40,13 @@ const MainNav = () => {
                         </Nav>
                         &nbsp;
                         <Form onSubmit={handleSubmit} className="d-flex">
-                            <Form.Control 
-                                type="search" 
-                                placeholder="Search" 
-                                className="me-2" 
-                                aria-label="Search"
-                                value={searchField}
-                                onChange={handleChange}
-                            />
+                            <Form.Control name="searchField" type="text" placeholder="Search" className="sm-2" />
+                            &nbsp; 
                             <Button variant="outline-success" type="submit">Search</Button>
                         </Form>
                         &nbsp;
                         <Nav>
-                        <NavDropdown title="User Name" id="basic-nav-dropdown">
+                        <NavDropdown title="kkotadia" id="basic-nav-dropdown">
                             <NavDropdown.Item href="/favourites" passHref onClick={closeNavbar}>Favourites</NavDropdown.Item>
                             <NavDropdown.Item href="/history" passHref onClick={closeNavbar}>Search History</NavDropdown.Item>
                         </NavDropdown>

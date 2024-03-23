@@ -2,7 +2,7 @@ import { Card, Button } from "react-bootstrap";
 import useSWR from "swr";
 import { useState } from "react";
 import { useAtom } from 'jotai';
-import { favouritesAtom } from '../store'; // Importing favouritesAtom from store
+import { favouritesAtom } from '@/store'; // Importing favouritesAtom from store
 
 const ArtworkCardDetail = ({ objectID }) => {
   const { data, error } = useSWR(
@@ -11,31 +11,20 @@ const ArtworkCardDetail = ({ objectID }) => {
 
   // Accessing favouritesAtom and its setter function
   const [favourites, setFavourites] = useAtom(favouritesAtom);
+  const [showAdded, setShowAdded] = useState(favourites.includes(objectID));
 
-  // Additional logic to get reference to favouritesList
-  const [favouritesList = []] = favourites;
-
-  // Local state for handling the button state and showAdded
-  const [isFavourite, setIsFavourite] = useState(favouritesList.includes(objectID));
-  const [showAdded, setShowAdded] = useState(favouritesList.includes(objectID));
-
-  const handleAddToFavourites = () => {
-    // Add the artwork to favourites list
-    setFavourites([...favouritesList, objectID]);
-    setIsFavourite(true);
-    setShowAdded(true);
-  };
+  useState(() => {
+      setShowAdded(favourites.includes(objectID));
+  }, [favourites, objectID]);
+  
 
   // Function to handle adding or removing artwork from favourites
   const favouritesClicked = () => {
     if (showAdded) {
-      // Remove the objectID from favouritesList
       setFavourites(current => current.filter(fav => fav !== objectID));
     } else {
-      // Add the objectID to favouritesList
       setFavourites(current => [...current, objectID]);
     }
-    // Toggle showAdded value
     setShowAdded(!showAdded);
   };
 

@@ -5,11 +5,12 @@ import MainNav from './MainNav';
 const Layout = (props) => {
     return (
         <>
+            <MainNav />
+            <br />
             <Container>
-                <MainNav />
-                <br />
                 {props.children}
             </Container>
+            <br />
         </>
     );
 };

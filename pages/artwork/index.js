@@ -1,23 +1,33 @@
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { Row, Col, Pagination, Card } from "react-bootstrap";
-import useSWR from "swr";
-import ArtworkCard from "../../components/ArtworkCard";
-
-// Import the validObjectIDList JSON file
-import validObjectIDList from '../../public/data/validObjectIDList.json';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import { Row, Col, Pagination, Card } from 'react-bootstrap';
+import ArtworkCard from '@/components/ArtworkCard.js';
+import Error from 'next/error';
+import React from 'react';
+import validObjectIDList from '@/public/data/validObjectIDList.json'
 
 const PER_PAGE = 12;
 
 const Artwork = () => {
-  const [artworkList, setArtworkList] = useState(null);
-  const [page, setPage] = useState(1);
   const router = useRouter();
-  let finalQuery = router.asPath.split("?")[1];
+  const [artworkList, setArtworkList] = React.useState(null);
+  const [page, setPage] = React.useState(1);
 
-  const { data, error } = useSWR(
-    `https://collectionapi.metmuseum.org/public/collection/v1/search?${finalQuery}`
-  );
+  const finalQuery = router.asPath.split('?')[1];
+  const { data, error } = useSWR(`https://collectionapi.metmuseum.org/public/collection/v1/search?${finalQuery}`);
+
+  React.useEffect(() => {
+    if (data) {
+      const results = [];
+      let filteredResults = validObjectIDList.objectIDs.filter(x => data.objectIDs?.includes(x));
+      for (let i = 0; i < filteredResults.length; i += PER_PAGE) {
+        const chunk = filteredResults.slice(i, i + PER_PAGE);
+        results.push(chunk);
+      }
+      setArtworkList(results);
+      setPage(1);
+    }
+  }, [data]);
 
   const previousPage = () => {
     if (page > 1) {
@@ -31,53 +41,23 @@ const Artwork = () => {
     }
   };
 
-  useEffect(() => {
-    if (data) {
-      // Filter out invalid objectIDs using the validObjectIDList
-      let filteredResults = validObjectIDList.objectIDs.filter(x => data.objectIDs?.includes(x));
-
-      let results = [];
-      for (let i = 0; i < filteredResults.length; i += PER_PAGE) {
-        const chunk = filteredResults.slice(i, i + PER_PAGE);
-        results.push(chunk);
-      }
-      setArtworkList(results);
-      setPage(1);
-    }
-  }, [data]);
-
-  if (error) {
-    return <Error statusCode={404} />;
-  }
-
-  if (!artworkList) {
-    return null;
-  }
+  if (error) return <Error statusCode={404} />;
+  
+  if (!artworkList) return null;
 
   return (
-    <>
-      {artworkList.length > 0 && (
-        <Row className="gy-4">
-          {artworkList[page - 1].map((currentObjectID) => (
-            <Col lg={3} key={currentObjectID}>
-              <ArtworkCard objectID={currentObjectID} />
-            </Col>
-          ))}
-        </Row>
-      )}
-      {artworkList.length === 0 && (
-        <Card>
-          <Card.Body>
-            <h4>Nothing Here</h4>
-            Try searching for something else.
-          </Card.Body>
-        </Card>
-      )}
-      {artworkList.length > 0 && (
+    <div>
+      {artworkList.length > 0 ? (
         <>
-          <br /> <br />
+          <Row className="gy-4">
+            {artworkList[page - 1]?.map((currentObjectID) => (
+              <Col lg={3} key={currentObjectID}>
+                <ArtworkCard objectID={currentObjectID} />
+              </Col>
+            ))}
+          </Row>
           <Row>
-            <Col className="d-flex ">
+            <Col>
               <Pagination>
                 <Pagination.Prev onClick={previousPage} />
                 <Pagination.Item>{page}</Pagination.Item>
@@ -86,9 +66,16 @@ const Artwork = () => {
             </Col>
           </Row>
         </>
+      ) : (
+        <Card>
+          <Card.Body>
+            <h4>Nothing Here</h4>
+            Try searching for something else.
+          </Card.Body>
+        </Card>
       )}
-    </>
+    </div>
   );
-};
+}
 
 export default Artwork;

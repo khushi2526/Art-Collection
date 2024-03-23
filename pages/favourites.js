@@ -1,29 +1,30 @@
 import { useAtom } from 'jotai';
-import { favouritesAtom } from '../store'; // Importing favouritesAtom from store
-import { Container, Row, Col, Alert } from 'react-bootstrap';
-import ArtworkCard from '../components/ArtworkCard'; // Assuming the correct path to ArtworkCard
+import { Row, Col, Card } from 'react-bootstrap';
+import ArtworkCard from '@/components/ArtworkCard.js';
+import { favouritesAtom } from '@/store.js';
 
 const Favourites = () => {
-  // Accessing favouritesAtom to get the favouritesList
-  const [favourites] = useAtom(favouritesAtom);
-  
+  const [favouritesList] = useAtom(favouritesAtom);
+
   return (
-    <Container>
-      <h1>Favourites</h1>
-      {favourites.length === 0 ? (
-        <Alert variant="info">
-          Nothing Here. Try adding some new artwork to the list.
-        </Alert>
-      ) : (
-        <Row>
-          {favourites.map((objectID, index) => (
-            <Col key={objectID} sm={12} md={6} lg={4}>
+    <div>
+      {favouritesList.length > 0 ? (
+        <Row className="gy-4">
+          {favouritesList.map((objectID) => (
+            <Col lg={3} key={objectID}>
               <ArtworkCard objectID={objectID} />
             </Col>
           ))}
         </Row>
+      ) : (
+        <Card>
+          <Card.Body>
+            <h4>Nothing Here</h4>
+            Try adding some new artwork to the list.
+          </Card.Body>
+        </Card>
       )}
-    </Container>
+    </div>
   );
 };
 
