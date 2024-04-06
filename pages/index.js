@@ -8,9 +8,8 @@
 * 
 *  Name: Khushi Shaileshkumar Kotadia Student ID: 167632215 Date: 08-03-2024
 * 
-*  GitHub URL: https://github.com/khushi2526/WEB422_Assignment-5.git
-*  Website Link: https://web-422-assignment-5-git-main-pandas-projects-8225c3b3.vercel.app
-*
+*  GitHub URL: https://github.com/khushi2526/WEB422_Assignment_6.git
+*  Website Link: 
 ********************************************************************************/
 
   
