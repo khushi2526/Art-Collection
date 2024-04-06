@@ -5,6 +5,7 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useAtom } from 'jotai';
 import { searchHistoryAtom } from '@/store.js';
+import { addToHistory } from '@/lib/userData';
 
 export default function AdvancedSearch() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function AdvancedSearch() {
   const [medium, setMedium] = useState('');
   const [searchHistory, setSearchHistory] = useAtom(searchHistoryAtom);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     let queryString = "";
 
     if (searchQuery) {
@@ -37,6 +38,7 @@ export default function AdvancedSearch() {
 
     router.push(`/artwork?${queryString}`);
 
+    await addToHistory(queryString); 
     setSearchHistory(current => [...current, queryString]);
   };
 

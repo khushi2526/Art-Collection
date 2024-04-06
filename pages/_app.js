@@ -1,30 +1,28 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { SWRConfig } from "swr";
-import Layout from "../components/Layout";
+import React from 'react';
+import '@/styles/bootstrap.min.css';
+import Layout from '@/components/Layout';
+import { SWRConfig } from 'swr';
+import RouteGuard from '@/components/RouteGuard';
 
-function MyApp({ Component, pageProps }) {
+
+const fetcher = async (...args) => {
+  const response = await fetch(...args);
+
+  if (!response.ok) {
+    throw new Error(`Request failed with status: ${response.status}`);
+  }
+
+  return response.json();
+};
+
+export default function App({ Component, pageProps }) {
   return (
-    <SWRConfig
-      value={{
-        fetcher: async (url) => {
-          const res = await fetch(url);
-          if (!res.ok) {
-            const error = new Error(
-              "An error occurred while fetching the data."
-            );
-            error.info = await res.json();
-            error.status = res.status;
-            throw error;
-          }
-          return res.json();
-        },
-      }}
-    >
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </SWRConfig>
-  );
+    <RouteGuard> 
+      <SWRConfig value={{ fetcher }}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </SWRConfig>
+    </RouteGuard>
+);
 }
-
-export default MyApp;

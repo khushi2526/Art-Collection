@@ -1,6 +1,6 @@
-import { useRouter } from "next/router";
-import { Row, Col } from "react-bootstrap";
-import ArtworkCardDetail from "@/components/ArtworkCardDetails";
+import { useRouter } from 'next/router';
+import { Row, Col } from 'react-bootstrap';
+import ArtworkCardDetail from '../../components/ArtworkCardDetail';
 
 const ArtworkById = () => {
   const router = useRouter();
